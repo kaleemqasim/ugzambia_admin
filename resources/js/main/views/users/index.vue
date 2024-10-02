@@ -43,7 +43,7 @@
                             <!-- {{ $t(`${langKey}.add`) }} -->
                         </a-button>
 
-                        <a-button type="primary" @click="updateEmployees" :loading="isSaving">
+                        <a-button type="primary" @click="updateEmployees" :loading="isUpdating">
                             <template v-if="isUpdating">
                                 <LoadingOutlined />
                                 Updating
@@ -227,13 +227,33 @@
                                     {{ $t(`common.${text}`) }}
                                 </a-tag>
                             </template>
-                            <template v-if="column.dataIndex === 'district'">
-                                {{ record.district }}
+
+
+                            <template v-if="column.dataIndex === 'ministry'">
+                                {{ record.ministry }}
                             </template>
+
+                            <template v-if="column.dataIndex === 'nrc_no'">
+                                {{ record.nrc_no }}
+                            </template>
+
+                            <template v-if="column.dataIndex === 'man_no'">
+                                {{ record.man_no }}
+                            </template>
+
+                            <template v-if="column.dataIndex === 'employee_id'">
+                                {{ record.employee_id }}
+                            </template>
+                            
+
+                            <template v-if="column.dataIndex === 'total'">
+                                {{ record.total }}
+                            </template>
+
                             <template v-if="column.dataIndex === 'created_at'">
                                 {{ formatDateTime(record.created_at) }}
                             </template>
-                            <template v-if="column.dataIndex === 'balance'">
+                            <!-- <template v-if="column.dataIndex === 'balance'">
                                 <a-typography-link
                                     type="primary"
                                     @click="openTransactions(record)"
@@ -243,7 +263,7 @@
                                         :amount="record.details?.due_amount"
                                     />
                                 </a-typography-link>
-                            </template>
+                            </template> -->
                             <template v-if="column.dataIndex === 'action'">
                                 <a-button
                                     type="primary"

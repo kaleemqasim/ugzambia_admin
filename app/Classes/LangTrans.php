@@ -699,7 +699,14 @@ class LangTrans
             'designation_id' => 'Designation',
             'shift_id' => 'Shift',
             'staff' => 'Staff',
-            'basic_salary' => 'Basic Salary'
+            'basic_salary' => 'Basic Salary',
+            'total' => 'Total',
+            'employee_no' => 'Employee No',
+            'nrc_no' => 'NRC No',
+            'man_no' => 'MAN No',
+            'district' => 'District',
+            'ministry' => 'Ministry',
+            'province' => 'Province'
         ],
         'print_barcode' => [
             'warehouse' => 'Warehouse',
