@@ -49,6 +49,7 @@
                                 Updating
                             </template>
                             <template v-else>
+                                <LoadingOutlined />
                                 <CloudDownloadOutlined />
                                 Update Employees
                             </template>
