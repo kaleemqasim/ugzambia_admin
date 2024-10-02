@@ -27,11 +27,11 @@ class ApiDataImportController extends Controller
         $response = Http::get('https://api.ugzambia.net/api/data-import/'.$period_id);
         $importData = $response->json()['data'];
         $request->session()->forget('importData');
-
         $request->session()->put('importData', $importData);
         return response()->json([
             'data' => $period_id,
             'status' => 200,
+            'count' => count($importData),
             'message' => 'Data stored in session successfully.'
         ]);
     }
@@ -163,7 +163,6 @@ class ApiDataImportController extends Controller
                             }
                         }
             
-                        // Create new User record
                         $newUser = new User();
                         $newUser->period_id = $data['periodName'];
                         $newUser->name = $data['names'];
@@ -179,9 +178,6 @@ class ApiDataImportController extends Controller
                         $newUser->warehouse_id = 1; // Assuming default warehouse_id
                         $newUser->company_id = 1; // Assuming default company_id
                         $newUser->save();
-                        
-                        info('user added');
-                        info($newUser);
             
                         // Save details for each warehouse
                         foreach ($warehouseIds as $warehouseId) {
@@ -200,6 +196,67 @@ class ApiDataImportController extends Controller
                     $chunk = [];
                 }
             }
+
+
+
+
+            // foreach ($importData as $nrcNo => $data) {
+                //     // Find existing user based on name and phone
+                //     $existingUser = User::where('name', $data['names'])
+                //         ->where('nrc_no', $data['nrcNo'])
+                //         ->first();
+        
+                //     if ($existingUser) {
+                //         $existingUser->update([
+                //             'period_id' => $data['periodName'],
+                //             'address' => $data['district'] . ',' . $data['province'],
+                //             'province' => $data['province'],
+                //             'district' => $data['district'],
+                //             'ministry' => $data['ministry'],
+                //             'employee_no' => $data['employeeNo'],
+                //             'man_no' => $data['manNo'],
+                //             'nrc_no' => $data['nrcNo'],
+                //             'import_at' => $data['importAt'],
+                //             'total' => $data['total']
+                //         ]);
+    
+                //         $importedUsers[] = $existingUser;
+                //     } else {
+                //         // Create new User record
+                //         $newUser = new User();
+                //         $newUser->period_id = $data['periodName'];
+                //         $newUser->name = $data['names'];
+                //         $newUser->phone = $data['nrcNo'];
+                //         $newUser->address = $data['district'] . ',' . $data['province'];
+                //         $newUser->province = $data['province'];
+                //         $newUser->district = $data['district'];
+                //         $newUser->ministry = $data['ministry'];
+                //         $newUser->employee_no = $data['employeeNo'];
+                //         $newUser->man_no = $data['manNo'];
+                //         $newUser->nrc_no = $data['nrcNo'];
+                //         $newUser->total = $data['total'];
+                //         $newUser->import_at = $data['importAt'];
+                //         $newUser->warehouse_id = 1; // Assuming default warehouse_id
+                //         $newUser->company_id = 1; // Assuming default company_id
+                //         $newUser->save();
+                        
+            
+                //         // Save details for each warehouse
+                //         foreach ($warehouseIds as $warehouseId) {
+                //             $userDetails = new UserDetails();
+                //             $userDetails->warehouse_id = $warehouseId;
+                //             $userDetails->user_id = $newUser->id;
+                //             $userDetails->opening_balance = 0; // Example value, adjust as needed
+                //             $userDetails->opening_balance_type = 'receive'; // Example type, adjust as needed
+                //             $userDetails->save();
+                //         }
+                        
+                //         $importedUsers[] = $newUser;
+                
+                //     }
+                    
+                //     unset($importData[$nrcNo]);
+                // }
             
 
 
