@@ -31,7 +31,7 @@
                         "
                     >
                     <a-space>
-                        <a-button type="primary" @click="syncEmployees">
+                        <a-button type="primary" @click="syncEmployees"  :loading="isSyncing">
                             <template v-if="isSyncing">
                                 <LoadingOutlined />
                                 Syncing
@@ -43,7 +43,7 @@
                             <!-- {{ $t(`${langKey}.add`) }} -->
                         </a-button>
 
-                        <a-button type="primary" @click="updateEmployees">
+                        <a-button type="primary" @click="updateEmployees" :loading="isSaving">
                             <template v-if="isUpdating">
                                 <LoadingOutlined />
                                 Updating
