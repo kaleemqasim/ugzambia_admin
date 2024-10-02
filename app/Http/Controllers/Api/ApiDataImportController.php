@@ -21,24 +21,57 @@ class ApiDataImportController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index(Request $request, $period_id)
-    {
-//        $response = Http::get('http://127.0.0.1:8001/api/data-import/'.$period_id);
-        $response = Http::get('https://api.ugzambia.net/api/data-import/'.$period_id);
-        $importData = $response->json()['data'];
-        $request->session()->forget('importData');
-        $request->session()->put('importData', $importData);
-        return response()->json([
-            'data' => $period_id,
-            'status' => 200,
-            'count' => count($importData),
-            'message' => 'Data stored in session successfully.'
-        ]);
-    }
+//     public function index(Request $request, $period_id)
+//     {
+//         $period_id = '202409';
+// //        $response = Http::get('http://127.0.0.1:8001/api/data-import/'.$period_id);
+//         $response = Http::get('https://api.ugzambia.net/api/data-import/'.$period_id);
+//         $importData = $response->json()['data'];
+//         $request->session()->forget('importData');
+//         $request->session()->put('importData', $importData);
+//         return response()->json([
+//             'data' => $period_id,
+//             'status' => 200,
+//             'count' => count($importData),
+//             'message' => 'Data stored in session successfully.'
+//         ]);
+//     }
+
+
+        
+        public function index(Request $request, $period_id)
+        {
+            // $period_id = '202409';
+            $apiUrl = 'https://ugzambia.net/server/index.php/Sys/current/' . $period_id;
+            $response = Http::withHeaders([
+                'Key' => 'ugas-system-mmarifat-112233'
+            ])->patch($apiUrl);
+        
+            if ($response->successful()) {
+                $importData = $response->json();
+                $request->session()->forget('importData');
+                $request->session()->put('importData', $importData);
+        
+                return response()->json([
+                    'data' => $period_id,
+                    'status' => 200,
+                    'count' => count($importData),
+                    'message' => 'Data stored in session successfully.'
+                ]);
+            }
+        
+            return response()->json([
+                'status' => $response->status(),
+                'message' => 'Failed to fetch data from the API.'
+            ], $response->status());
+        }
 
 
     public function processImportedData(Request $request)
     {
+        ini_set('max_execution_time', 5000);
+        ini_set('memory_limit', '1024M');
+        ini_set('max_input_time', 5000);
         $importData = $request->session()->get('importData', []);
         if (empty($importData)) {
             return response()->json([
@@ -54,12 +87,12 @@ class ApiDataImportController extends Controller
             // foreach ($importData as $nrcNo => $data) {
             //     // Find existing user based on name and phone
             //     $existingUser = User::where('name', $data['names'])
-            //         ->where('phone', $data['nrcNo'])
+            //         ->where('nrc_no', $data['nrcNo'])
             //         ->first();
 
             //     if ($existingUser) {
             //         $isDuplicate = User::where('name', $data['names'])
-            //             ->where('phone', $data['nrcNo'])
+            //             ->where('nrc_no', $data['nrcNo'])
             //             ->where('id', '!=', $existingUser->id)
             //             ->exists();
 
@@ -76,7 +109,8 @@ class ApiDataImportController extends Controller
             //                 'employee_no' => $data['employeeNo'],
             //                 'man_no' => $data['manNo'],
             //                 'nrc_no' => $data['nrcNo'],
-            //                 'import_at' => $data['importAt']
+            //                 'import_at' => $data['importAt'],
+            //                 'total' => $data['total']
             //             ]);
 
             //             $importedUsers[] = $existingUser;
@@ -99,6 +133,7 @@ class ApiDataImportController extends Controller
             //     $newUser->employee_no = $data['employeeNo'];
             //     $newUser->man_no = $data['manNo'];
             //     $newUser->nrc_no = $data['nrcNo'];
+            //     $newUser->total = $data['total'];
             //     $newUser->import_at = $data['importAt'];
             //     $newUser->warehouse_id = 1; // Assuming default warehouse_id
             //     $newUser->company_id = 1; // Assuming default company_id
@@ -118,150 +153,69 @@ class ApiDataImportController extends Controller
             // }
             
             
-            $chunkSize = 200; // Define the chunk size
-            $importedUsers = [];
-            $chunk = [];
-            ini_set('max_execution_time', 5000);
-            ini_set('memory_limit', '1024M');
-            ini_set('max_input_time', 5000);
+            $usersData = [];
+            $userDetailsData = [];
+            $batchSize = 1000;
+            $counter = 0;
+            $now = now();
+    
+            $lastUser = User::orderBy('id', 'desc')->first();
+            $lastId = $lastUser ? $lastUser->id + 1 : 1;
+            
             foreach ($importData as $nrcNo => $data) {
-                // Process the data in chunks
-                $chunk[] = $data;
-            
-                if (count($chunk) >= $chunkSize || $nrcNo == count($importData) - 1) {
-                    // Process the chunk
-                    foreach ($chunk as $data) {
-                        // Find existing user based on name and phone
-                        $existingUser = User::where('name', $data['names'])
-                            ->where('phone', $data['nrcNo'])
-                            ->first();
-            
-                        if ($existingUser) {
-                            $isDuplicate = User::where('name', $data['names'])
-                                ->where('phone', $data['nrcNo'])
-                                ->where('id', '!=', $existingUser->id)
-                                ->exists();
-            
-                            if ($isDuplicate) {
-                                User::where('id', $existingUser->id)->delete();
-                                UserDetails::where('user_id', $existingUser->id)->delete();
-                            } else {
-                                $existingUser->update([
-                                    'period_id' => $data['periodName'],
-                                    'address' => $data['district'] . ',' . $data['province'],
-                                    'province' => $data['province'],
-                                    'district' => $data['district'],
-                                    'ministry' => $data['ministry'],
-                                    'employee_no' => $data['employeeNo'],
-                                    'man_no' => $data['manNo'],
-                                    'nrc_no' => $data['nrcNo'],
-                                    'import_at' => $data['importAt']
-                                ]);
-            
-                                $importedUsers[] = $existingUser;
-                                continue;
-                            }
-                        }
-            
-                        $newUser = new User();
-                        $newUser->period_id = $data['periodName'];
-                        $newUser->name = $data['names'];
-                        $newUser->phone = $data['nrcNo'];
-                        $newUser->address = $data['district'] . ',' . $data['province'];
-                        $newUser->province = $data['province'];
-                        $newUser->district = $data['district'];
-                        $newUser->ministry = $data['ministry'];
-                        $newUser->employee_no = $data['employeeNo'];
-                        $newUser->man_no = $data['manNo'];
-                        $newUser->nrc_no = $data['nrcNo'];
-                        $newUser->import_at = $data['importAt'];
-                        $newUser->warehouse_id = 1; // Assuming default warehouse_id
-                        $newUser->company_id = 1; // Assuming default company_id
-                        $newUser->save();
-            
-                        // Save details for each warehouse
-                        foreach ($warehouseIds as $warehouseId) {
-                            $userDetails = new UserDetails();
-                            $userDetails->warehouse_id = $warehouseId;
-                            $userDetails->user_id = $newUser->id;
-                            $userDetails->opening_balance = 0; // Example value, adjust as needed
-                            $userDetails->opening_balance_type = 'receive'; // Example type, adjust as needed
-                            $userDetails->save();
-                        }
-            
-                        $importedUsers[] = $newUser;
-                    }
-            
-                    // Reset the chunk
-                    $chunk = [];
+                // Prepare user data for bulk insert
+                $usersData[] = [
+                    'id' => $lastId,
+                    'period_id' => $data['periodName'],
+                    'name' => $data['names'],
+                    'phone' => $data['nrcNo'],
+                    'address' => $data['district'] . ',' . $data['province'],
+                    'province' => $data['province'],
+                    'district' => $data['district'],
+                    'ministry' => $data['ministry'],
+                    'employee_no' => $data['employeeNo'],
+                    'man_no' => $data['manNo'],
+                    'nrc_no' => $data['nrcNo'],
+                    'total' => $data['total'],
+                    'import_at' => $data['importAt'],
+                    'warehouse_id' => 1, // Default warehouse_id
+                    'company_id' => 1, // Default company_id
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+    
+                // Prepare user details data for bulk insert
+                foreach ($warehouseIds as $warehouseId) {
+                    $userDetailsData[] = [
+                        'warehouse_id' => $warehouseId,
+                        'user_id' => $lastId,
+                        'opening_balance' => 0, // Example value, adjust as needed
+                        'opening_balance_type' => 'receive', // Example type, adjust as needed
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ];
                 }
+    
+                // Increment last ID for the next user
+                $lastId++;
+                $counter++;
+    
+                // If we have reached the chunk size, insert the data
+                if ($counter % $batchSize == 0) {
+                    $this->insertUsersAndDetails($usersData, $userDetailsData);
+                    $usersData = []; // Reset usersData after insert
+                    $userDetailsData = []; // Reset userDetailsData after insert
+                    $counter = 0; // Reset counter for the next batch
+                }
+            }
+    
+            if (!empty($usersData)) {
+                $this->insertUsersAndDetails($usersData, $userDetailsData);
             }
 
 
-
-
-            // foreach ($importData as $nrcNo => $data) {
-                //     // Find existing user based on name and phone
-                //     $existingUser = User::where('name', $data['names'])
-                //         ->where('nrc_no', $data['nrcNo'])
-                //         ->first();
-        
-                //     if ($existingUser) {
-                //         $existingUser->update([
-                //             'period_id' => $data['periodName'],
-                //             'address' => $data['district'] . ',' . $data['province'],
-                //             'province' => $data['province'],
-                //             'district' => $data['district'],
-                //             'ministry' => $data['ministry'],
-                //             'employee_no' => $data['employeeNo'],
-                //             'man_no' => $data['manNo'],
-                //             'nrc_no' => $data['nrcNo'],
-                //             'import_at' => $data['importAt'],
-                //             'total' => $data['total']
-                //         ]);
-    
-                //         $importedUsers[] = $existingUser;
-                //     } else {
-                //         // Create new User record
-                //         $newUser = new User();
-                //         $newUser->period_id = $data['periodName'];
-                //         $newUser->name = $data['names'];
-                //         $newUser->phone = $data['nrcNo'];
-                //         $newUser->address = $data['district'] . ',' . $data['province'];
-                //         $newUser->province = $data['province'];
-                //         $newUser->district = $data['district'];
-                //         $newUser->ministry = $data['ministry'];
-                //         $newUser->employee_no = $data['employeeNo'];
-                //         $newUser->man_no = $data['manNo'];
-                //         $newUser->nrc_no = $data['nrcNo'];
-                //         $newUser->total = $data['total'];
-                //         $newUser->import_at = $data['importAt'];
-                //         $newUser->warehouse_id = 1; // Assuming default warehouse_id
-                //         $newUser->company_id = 1; // Assuming default company_id
-                //         $newUser->save();
-                        
-            
-                //         // Save details for each warehouse
-                //         foreach ($warehouseIds as $warehouseId) {
-                //             $userDetails = new UserDetails();
-                //             $userDetails->warehouse_id = $warehouseId;
-                //             $userDetails->user_id = $newUser->id;
-                //             $userDetails->opening_balance = 0; // Example value, adjust as needed
-                //             $userDetails->opening_balance_type = 'receive'; // Example type, adjust as needed
-                //             $userDetails->save();
-                //         }
-                        
-                //         $importedUsers[] = $newUser;
-                
-                //     }
-                    
-                //     unset($importData[$nrcNo]);
-                // }
-            
-
-
             return response()->json([
-                'data' => $importedUsers,
+                'data' => [],
                 'status' => 200,
                 'message' => 'Data processed successfully.'
             ]);
@@ -274,7 +228,14 @@ class ApiDataImportController extends Controller
         }
     }
 
-
+    private function insertUsersAndDetails(array $usersData, array $userDetailsData)
+    {
+        // Bulk insert users
+        DB::table('users')->insert($usersData);
+    
+        // Bulk insert user details
+        DB::table('user_details')->insert($userDetailsData);
+    }
 
 
 //    public function index(Request $request, $period_id)

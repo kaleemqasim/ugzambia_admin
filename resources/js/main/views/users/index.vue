@@ -292,7 +292,7 @@
                                 </a-button>
                             </template>
                         </template>
-                        <template v-if="userType && userType != 'users'" #summary>
+                        <!-- <template v-if="userType && userType != 'users'" #summary>
                             <a-table-summary-row>
                                 <a-table-summary-cell :col-span="1">
                                 </a-table-summary-cell>
@@ -342,7 +342,7 @@
                                     </a-typography-text>
                                 </a-table-summary-cell>
                             </a-table-summary-row>
-                        </template>
+                        </template> -->
                     </a-table>
                 </div>
             </a-col>
@@ -442,7 +442,7 @@ export default {
         const route = useRoute();
         const userType = ref(route.meta.menuKey);
         const urlParams =
-            "?fields=id,district,ministry,province,nrc_no,man_no,employee_no,xid,user_type,name,email,profile_image,profile_image_url,is_walkin_customer,phone,address,shipping_address,status,tax_number,created_at,details{opening_balance,opening_balance_type,credit_period,credit_limit,due_amount,warehouse_id,x_warehouse_id},details:warehouse{id,xid,name},role_id,role{id,xid,name,display_name},warehouse_id,x_warehouse_id,warehouse{xid,name},userWarehouses{user_id,x_user_id,warehouse_id,x_warehouse_id}";
+            "?fields=id,district,ministry,province,total,nrc_no,man_no,employee_no,xid,user_type,name,email,profile_image,profile_image_url,is_walkin_customer,phone,address,shipping_address,status,tax_number,created_at,details{opening_balance,opening_balance_type,credit_period,credit_limit,due_amount,warehouse_id,x_warehouse_id},details:warehouse{id,xid,name},role_id,role{id,xid,name,display_name},warehouse_id,x_warehouse_id,warehouse{xid,name},userWarehouses{user_id,x_user_id,warehouse_id,x_warehouse_id}";
 
         const searchStatus = ref(undefined);
         const activeTabKey = ref("all");
@@ -505,9 +505,7 @@ export default {
                 notification.error({
                     placement: "topRight",
                     message: t("common.error"),
-                    description: error.response?.status === 404 
-                        ? "No employees found in session" 
-                        : "An error occurred while updating employees",
+                    description: "No employees found in session"
                 });
                 console.error("Error updating employees:", error); // Log the error to the console for debugging
             } finally {
