@@ -31,7 +31,7 @@
                         "
                     >
                     <a-space>
-                        <a-button type="primary" @click="syncEmployees"  :loading="isSyncing">
+                        <a-button type="primary" @click="syncEmployees" :loading="isSyncing">
                             <template v-if="isSyncing">
                                 <LoadingOutlined />
                                 Syncing
@@ -53,6 +53,10 @@
                                 Update Employees
                             </template>
                             <!-- {{ $t(`${langKey}.add`) }} -->
+                        </a-button>
+
+                        <a-button type="primary">
+                            {{ totalMembers }} Members
                         </a-button>
                         <!-- <ImportUsers
                             :pageTitle="importPageTitle"
@@ -222,6 +226,9 @@
                                 <a-tag :color="statusColors[text]">
                                     {{ $t(`common.${text}`) }}
                                 </a-tag>
+                            </template>
+                            <template v-if="column.dataIndex === 'district'">
+                                {{ record.district }}
                             </template>
                             <template v-if="column.dataIndex === 'created_at'">
                                 {{ formatDateTime(record.created_at) }}
@@ -403,6 +410,7 @@ export default {
         const { t } = useI18n();
         const isSyncing = ref(false);
         const isUpdating = ref(false);
+        const totalMembers = ref(0);
 
         const {
             statusColors,
@@ -425,7 +433,7 @@ export default {
         const route = useRoute();
         const userType = ref(route.meta.menuKey);
         const urlParams =
-            "?fields=id,district,xid,user_type,name,email,profile_image,profile_image_url,is_walkin_customer,phone,address,shipping_address,status,tax_number,created_at,details{opening_balance,opening_balance_type,credit_period,credit_limit,due_amount,warehouse_id,x_warehouse_id},details:warehouse{id,xid,name},role_id,role{id,xid,name,display_name},warehouse_id,x_warehouse_id,warehouse{xid,name},userWarehouses{user_id,x_user_id,warehouse_id,x_warehouse_id}";
+            "?fields=id,district,ministry,province,nrc_no,man_no,employee,xid,user_type,name,email,profile_image,profile_image_url,is_walkin_customer,phone,address,shipping_address,status,tax_number,created_at,details{opening_balance,opening_balance_type,credit_period,credit_limit,due_amount,warehouse_id,x_warehouse_id},details:warehouse{id,xid,name},role_id,role{id,xid,name,display_name},warehouse_id,x_warehouse_id,warehouse{xid,name},userWarehouses{user_id,x_user_id,warehouse_id,x_warehouse_id}";
 
         const searchStatus = ref(undefined);
         const activeTabKey = ref("all");
@@ -619,7 +627,8 @@ export default {
             syncEmployees,
             updateEmployees,
             isSyncing,
-            isUpdating
+            isUpdating,
+            totalMembers
         };
     },
 };
