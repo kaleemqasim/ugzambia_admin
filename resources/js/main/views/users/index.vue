@@ -483,7 +483,6 @@ export default {
                     message: t("common.error"),
                     description: "Something went wrong",
                 });
-                console.error("Error syncing employees:", error); // Log error for debugging
             } finally {
                 // Ensure isSyncing is set to false regardless of success or failure
                 isSyncing.value = false;
@@ -507,7 +506,6 @@ export default {
                     message: t("common.error"),
                     description: "No employees found in session"
                 });
-                console.error("Error updating employees:", error); // Log the error to the console for debugging
             } finally {
                 // Always stop the loader, whether request succeeds or fails
                 isUpdating.value = false;
