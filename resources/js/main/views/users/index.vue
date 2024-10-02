@@ -513,7 +513,26 @@ export default {
             crudVariables.table.filterableColumns = filterableColumns;
 
             setFormData();
+            fetchTotalMembers();
         });
+
+        const fetchTotalMembers =  async() => {
+            try {
+                axiosAdmin.get(`total-member`).then((res) => {
+                    totalMembers.value = res.data;
+                    console.log('asdasd');
+                    console.log(res.data)
+                    isUpdating.value = false;
+                });
+            } catch(e) {
+                notification.success({
+                    placement: "topRight",
+                    message: t("common.error"),
+                    description: "Please fetch employee data first",
+                });
+                isUpdating.value = false;
+            }
+        }
 
         const setFormData = () => {
             if (userType.value == "suppliers") {

@@ -128,7 +128,7 @@ class ApiDataImportController extends Controller
 
     public function totalMember()
     {
-        $response['data']=User::count();
+        $response['data']=User::where('user_type', 'customers')->count();
         return response()->json(['data' => $response,'status' => 200, 'message' => 'Data pull successfully.']);
     }
 
