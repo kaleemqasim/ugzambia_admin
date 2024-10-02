@@ -462,51 +462,59 @@ export default {
             transactionVisible.value = false;
         };
 
-        const syncEmployees =  async() => {
+        const syncEmployees = async () => {
             isSyncing.value = true;
+            
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth() + 1; // +1 because getMonth() returns 0-11
             const formattedDate = `${year}${month.toString().padStart(2, '0')}`;
-            
-            axiosAdmin.get(`period-api-data-import-session/${formattedDate}`).then((res) => {
+
+            try {
+                const res = await axiosAdmin.get(`period-api-data-import-session/${formattedDate}`);
                 notification.success({
                     placement: "topRight",
                     message: t("common.success"),
                     description: "Employees updated data has been successfully fetched in session",
                 });
-                isSyncing.value = false;
-            }).catch((error) => {
+            } catch (error) {
                 notification.error({
                     placement: "topRight",
                     message: t("common.error"),
                     description: "Something went wrong",
                 });
-                
-                isUpdating.value = false;
-            });    
-        }
+                console.error("Error syncing employees:", error); // Log error for debugging
+            } finally {
+                // Ensure isSyncing is set to false regardless of success or failure
+                isSyncing.value = false;
+            }
+        };
 
-        const updateEmployees =  async() => {
+
+        const updateEmployees = async () => {
             isUpdating.value = true;
-            
-            axiosAdmin.get(`process-session-import-data`).then((res) => {
+
+            try {
+                const res = await axiosAdmin.get(`process-session-import-data`);
                 notification.success({
                     placement: "topRight",
                     message: t("common.success"),
-                    description: "Employees updated data has been successfully saved in database",
+                    description: "Employees updated data has been successfully saved in the database",
                 });
-                isUpdating.value = false;
-            }).catch((error) => {
+            } catch (error) {
                 notification.error({
                     placement: "topRight",
                     message: t("common.error"),
-                    description: "No employees found in session",
+                    description: error.response?.status === 404 
+                        ? "No employees found in session" 
+                        : "An error occurred while updating employees",
                 });
-
+                console.error("Error updating employees:", error); // Log the error to the console for debugging
+            } finally {
+                // Always stop the loader, whether request succeeds or fails
                 isUpdating.value = false;
-            });
-        }
+            }
+        };
 
         onMounted(() => {
             setUrlData();
