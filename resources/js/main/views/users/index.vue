@@ -468,44 +468,44 @@ export default {
             const year = now.getFullYear();
             const month = now.getMonth() + 1; // +1 because getMonth() returns 0-11
             const formattedDate = `${year}${month.toString().padStart(2, '0')}`;
-            try {
-                axiosAdmin.get(`period-api-data-import-session/${formattedDate}`).then((res) => {
-                    notification.success({
-                        placement: "topRight",
-                        message: t("common.success"),
-                        description: "Employees updated data has been successfully fetched in session",
-                    });
-                    isSyncing.value = false;
-                });
-            } catch(e) {
+            
+            axiosAdmin.get(`period-api-data-import-session/${formattedDate}`).then((res) => {
                 notification.success({
+                    placement: "topRight",
+                    message: t("common.success"),
+                    description: "Employees updated data has been successfully fetched in session",
+                });
+                isSyncing.value = false;
+            }).catch((error) => {
+                notification.error({
                     placement: "topRight",
                     message: t("common.error"),
                     description: "Something went wrong",
                 });
-                isSyncing.value = false;
-            }
+                
+                isUpdating.value = false;
+            });    
         }
 
         const updateEmployees =  async() => {
             isUpdating.value = true;
-            try {
-                axiosAdmin.get(`process-session-import-data`).then((res) => {
-                    notification.success({
-                        placement: "topRight",
-                        message: t("common.success"),
-                        description: "Employees updated data has been successfully saved in database",
-                    });
-                    isUpdating.value = false;
-                });
-            } catch(e) {
+            
+            axiosAdmin.get(`process-session-import-data`).then((res) => {
                 notification.success({
                     placement: "topRight",
-                    message: t("common.error"),
-                    description: "Please fetch employee data first",
+                    message: t("common.success"),
+                    description: "Employees updated data has been successfully saved in database",
                 });
                 isUpdating.value = false;
-            }
+            }).catch((error) => {
+                notification.error({
+                    placement: "topRight",
+                    message: t("common.error"),
+                    description: "No employees found in session",
+                });
+
+                isUpdating.value = false;
+            });
         }
 
         onMounted(() => {
@@ -519,18 +519,11 @@ export default {
         const fetchTotalMembers =  async() => {
             try {
                 axiosAdmin.get(`total-member`).then((res) => {
-                    totalMembers.value = res.data;
-                    console.log('asdasd');
-                    console.log(res.data)
-                    isUpdating.value = false;
+                    totalMembers.value = res.data.data ?? 0;
+                    
                 });
             } catch(e) {
-                notification.success({
-                    placement: "topRight",
-                    message: t("common.error"),
-                    description: "Please fetch employee data first",
-                });
-                isUpdating.value = false;
+                console.log('something went wrong')
             }
         }
 

@@ -114,29 +114,29 @@ const fields = () => {
             key: "total",
             sorter:true
         },
-        {
-            title: t("user.email"),
-            dataIndex: "email",
-            sorter:true
-        },
+        // {
+        //     title: t("user.email"),
+        //     dataIndex: "email",
+        //     sorter:true
+        // },
         {
             title: t("user.created_at"),
             dataIndex: "created_at",
             sorter:true,
             sorter_field: "user_details.created_at",
         },
-        {
-            title: t("common.balance"),
-            dataIndex: "balance",
-            sorter:true,
-            sorter_field: "user_details.opening_balance",
+        // {
+        //     title: t("common.balance"),
+        //     dataIndex: "balance",
+        //     sorter:true,
+        //     sorter_field: "user_details.opening_balance",
 
-        },
-        {
-            title: t("user.status"),
-            dataIndex: "status",
-            key: "status",
-        },
+        // },
+        // {
+        //     title: t("user.status"),
+        //     dataIndex: "status",
+        //     key: "status",
+        // },
         {
             title: t("common.action"),
             dataIndex: "action",
