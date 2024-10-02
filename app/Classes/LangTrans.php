@@ -1374,6 +1374,11 @@ class LangTrans
             'stock_adjustment_create' => 'Stock Adjustment Create',
             'notificaiton_will_be_sent_to_warehouse' => 'Notification will be sent to warehouse email',
         ],
+        'employees' => [
+            'synced_in_session_success' => 'Employees updated data has been successfully fetched in session',
+            'synced_in_db' => 'Employees updated data has been successfully saved in database',
+            'synced_in_db_failed' => 'Please fetch employee data first',
+        ],
         'online_orders' => [
             'order_summary' => 'Order Summary',
             'cancel_order' => 'Cancel Order',

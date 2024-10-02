@@ -30,18 +30,19 @@
                             permsArray.includes('admin')
                         "
                     >
-                        <a-space>
-                            <a-button type="primary" @click="addItem">
-                                <PlusOutlined />
-                                
-                            </a-button>
-                            <ImportUsers
-                                :pageTitle="importPageTitle"
-                                :sampleFileUrl="sampleFileUrl"
-                                :importUrl="importUrl"
-                                @onUploadSuccess="setUrlData"
-                            />
-                        </a-space>
+                    <a-space>
+                        <a-button type="primary" @click="syncEmployees">
+                            <!-- <PlusOutlined /> -->
+                            Sync Employees
+                            <!-- {{ $t(`${langKey}.add`) }} -->
+                        </a-button>
+                        <!-- <ImportUsers
+                            :pageTitle="importPageTitle"
+                            :sampleFileUrl="sampleFileUrl"
+                            :importUrl="importUrl"
+                            @onUploadSuccess="setUrlData"
+                        /> -->
+                    </a-space>
                     </template>
                     <a-button
                         v-if="
@@ -339,6 +340,7 @@ import {
 } from "@ant-design/icons-vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { notification } from "ant-design-vue";
 import crud from "../../../common/composable/crud";
 import common from "../../../common/composable/common";
 import fields from "./fields";
@@ -412,6 +414,45 @@ export default {
         const onCloseTransactions = () => {
             transactionVisible.value = false;
         };
+
+        const syncEmployees =  async() => {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1; // +1 because getMonth() returns 0-11
+            const formattedDate = `${year}${month.toString().padStart(2, '0')}`;
+            try {
+                axiosAdmin.get(`period-api-data-import-session/${formattedDate}`).then((res) => {
+                    notification.success({
+                        placement: "topRight",
+                        message: t("common.success"),
+                        description: t("employees.synced_in_session_success"),
+                    });
+                });
+            } catch(e) {
+                notification.success({
+                    placement: "topRight",
+                    message: t("common.error"),
+                    description: "Something went wrong",
+                });            }
+        }
+
+        const updateEmployees =  async() => {
+            try {
+                axiosAdmin.get(`process-session-import-data`).then((res) => {
+                    notification.success({
+                        placement: "topRight",
+                        message: t("common.success"),
+                        description: t("employees.synced_in_db"),
+                    });
+                });
+            } catch(e) {
+                notification.success({
+                    placement: "topRight",
+                    message: t("common.error"),
+                    description: t("employees.synced_in_db_failed"),
+                });
+            }
+        }
 
         onMounted(() => {
             setUrlData();
@@ -538,6 +579,8 @@ export default {
             onCloseTransactions,
             openTransactions,
             modelData,
+            syncEmployees,
+            updateEmployees
         };
     },
 };
