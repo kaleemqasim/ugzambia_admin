@@ -32,26 +32,15 @@
                     >
                     <a-space>
                         <a-button type="primary" @click="syncEmployees" :loading="isSyncing">
-                            <template v-if="isSyncing">
-                                <LoadingOutlined />
-                                Syncing
-                            </template>
-                            <template v-else>
-                                <SyncOutlined />
-                                Sync Employees
-                            </template>
+                            <SyncOutlined v-if="!isSyncing" />    
+                            Sync Employees
+                            
                             <!-- {{ $t(`${langKey}.add`) }} -->
                         </a-button>
 
                         <a-button type="primary" @click="updateEmployees" :loading="isUpdating">
-                            <template v-if="isUpdating">
-                                <LoadingOutlined />
-                                Updating
-                            </template>
-                            <template v-else>
-                                <CloudDownloadOutlined />
-                                Update Employees
-                            </template>
+                            <SaveOutlined v-if="!isUpdating" />
+                            Update Employees
                             <!-- {{ $t(`${langKey}.add`) }} -->
                         </a-button>
 

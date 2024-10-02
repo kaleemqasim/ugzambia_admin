@@ -79,37 +79,37 @@ const fields = () => {
             sorter:true
         },
         {
-            title: t("user.district"),
+            title: t("District"),
             dataIndex: "district",
             key: "district",
             sorter:true
         },
         {
-            title: t("user.ministry"),
+            title: t("Ministry"),
             dataIndex: "ministry",
             key: "ministry",
             sorter:true
         },
         {
-            title: t("user.nrc_no"),
+            title: t("NRC No"),
             dataIndex: "nrc_no",
             key: "nrc_no",
             sorter:true
         },
         {
-            title: t("user.man_no"),
+            title: t("MAN No"),
             dataIndex: "man_no",
             key: "man_no",
             sorter:true
         },
         {
-            title: t("user.employee_no"),
+            title: t("Employee No"),
             dataIndex: "employee_no",
             key: "employee_no",
             sorter:true
         },
         {
-            title: t("user.total"),
+            title: t("Total"),
             dataIndex: "total",
             key: "total",
             sorter:true
