@@ -49,7 +49,6 @@
                                 Updating
                             </template>
                             <template v-else>
-                                <LoadingOutlined />
                                 <CloudDownloadOutlined />
                                 Update Employees
                             </template>
@@ -459,8 +458,8 @@ export default {
                         message: t("common.success"),
                         description: "Employees updated data has been successfully fetched in session",
                     });
+                    isSyncing.value = false;
                 });
-                isSyncing.value = false;
             } catch(e) {
                 notification.success({
                     placement: "topRight",
