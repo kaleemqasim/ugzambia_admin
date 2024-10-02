@@ -1,0 +1,1 @@
+import{_ as a,o as s,c as r,a as n,w as l,S as c,h as p,D as _,T as m}from"./app-OikDM5Kw.js";const d={};function i(t,e,f,u,$,g){const o=m;return s(),r(_,null,[n(o,{level:5},{default:l(()=>[c(t.$slots,"default")]),_:3}),e[0]||(e[0]=p("hr",{style:{"margin-bottom":"20px"}},null,-1))],64)}const h=a(d,[["render",i]]);export{h as F};
