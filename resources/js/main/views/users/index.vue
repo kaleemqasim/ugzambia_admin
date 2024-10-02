@@ -32,8 +32,26 @@
                     >
                     <a-space>
                         <a-button type="primary" @click="syncEmployees">
-                            <!-- <PlusOutlined /> -->
-                            Sync Employees
+                            <template v-if="isSyncing">
+                                <LoadingOutlined />
+                                Syncing
+                            </template>
+                            <template v-else>
+                                <SyncOutlined />
+                                Sync Employees
+                            </template>
+                            <!-- {{ $t(`${langKey}.add`) }} -->
+                        </a-button>
+
+                        <a-button type="primary" @click="updateEmployees">
+                            <template v-if="isUpdating">
+                                <LoadingOutlined />
+                                Updating
+                            </template>
+                            <template v-else>
+                                <CloudDownloadOutlined />
+                                Update Employees
+                            </template>
                             <!-- {{ $t(`${langKey}.add`) }} -->
                         </a-button>
                         <!-- <ImportUsers
@@ -337,7 +355,12 @@ import {
     DeleteOutlined,
     ArrowUpOutlined,
     ArrowDownOutlined,
-} from "@ant-design/icons-vue";
+    SyncOutlined, 
+    SaveOutlined,
+    LoadingOutlined,
+    CloudDownloadOutlined
+} from '@ant-design/icons-vue'; // Import Ant Design icons
+
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { notification } from "ant-design-vue";
@@ -371,9 +394,16 @@ export default {
         UserView,
         ImportUsers,
         UserTransaction,
+        SyncOutlined,
+        SaveOutlined,
+        LoadingOutlined,
+        CloudDownloadOutlined
     },
     setup() {
         const { t } = useI18n();
+        const isSyncing = ref(false);
+        const isUpdating = ref(false);
+
         const {
             statusColors,
             userStatus,
@@ -416,6 +446,7 @@ export default {
         };
 
         const syncEmployees =  async() => {
+            isSyncing.value = true;
             const now = new Date();
             const year = now.getFullYear();
             const month = now.getMonth() + 1; // +1 because getMonth() returns 0-11
@@ -425,32 +456,38 @@ export default {
                     notification.success({
                         placement: "topRight",
                         message: t("common.success"),
-                        description: t("employees.synced_in_session_success"),
+                        description: "Employees updated data has been successfully fetched in session",
                     });
                 });
+                isSyncing.value = false;
             } catch(e) {
                 notification.success({
                     placement: "topRight",
                     message: t("common.error"),
                     description: "Something went wrong",
-                });            }
+                });
+                isSyncing.value = false;
+            }
         }
 
         const updateEmployees =  async() => {
+            isUpdating.value = true;
             try {
                 axiosAdmin.get(`process-session-import-data`).then((res) => {
                     notification.success({
                         placement: "topRight",
                         message: t("common.success"),
-                        description: t("employees.synced_in_db"),
+                        description: "Employees updated data has been successfully saved in database",
                     });
+                    isUpdating.value = false;
                 });
             } catch(e) {
                 notification.success({
                     placement: "topRight",
                     message: t("common.error"),
-                    description: t("employees.synced_in_db_failed"),
+                    description: "Please fetch employee data first",
                 });
+                isUpdating.value = false;
             }
         }
 
@@ -580,7 +617,9 @@ export default {
             openTransactions,
             modelData,
             syncEmployees,
-            updateEmployees
+            updateEmployees,
+            isSyncing,
+            isUpdating
         };
     },
 };
