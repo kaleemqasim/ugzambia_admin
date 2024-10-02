@@ -33,7 +33,7 @@
                         <a-space>
                             <a-button type="primary" @click="addItem">
                                 <PlusOutlined />
-                                {{ $t(`${langKey}.add`) }}
+                                
                             </a-button>
                             <ImportUsers
                                 :pageTitle="importPageTitle"
