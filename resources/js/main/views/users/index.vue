@@ -239,6 +239,10 @@
                                 {{ record.total }}
                             </template>
 
+                            <template v-if="column.dataIndex === 'period'">
+                                {{ record.period }}
+                            </template>
+
                             <template v-if="column.dataIndex === 'created_at'">
                                 {{ formatDateTime(record.created_at) }}
                             </template>
@@ -442,7 +446,7 @@ export default {
         const route = useRoute();
         const userType = ref(route.meta.menuKey);
         const urlParams =
-            "?fields=id,district,ministry,province,total,nrc_no,man_no,employee_no,xid,user_type,name,email,profile_image,profile_image_url,is_walkin_customer,phone,address,shipping_address,status,tax_number,created_at,details{opening_balance,opening_balance_type,credit_period,credit_limit,due_amount,warehouse_id,x_warehouse_id},details:warehouse{id,xid,name},role_id,role{id,xid,name,display_name},warehouse_id,x_warehouse_id,warehouse{xid,name},userWarehouses{user_id,x_user_id,warehouse_id,x_warehouse_id}";
+            "?fields=id,district,ministry,province,total,period,nrc_no,man_no,employee_no,xid,user_type,name,email,profile_image,profile_image_url,is_walkin_customer,phone,address,shipping_address,status,tax_number,created_at,details{opening_balance,opening_balance_type,credit_period,credit_limit,due_amount,warehouse_id,x_warehouse_id},details:warehouse{id,xid,name},role_id,role{id,xid,name,display_name},warehouse_id,x_warehouse_id,warehouse{xid,name},userWarehouses{user_id,x_user_id,warehouse_id,x_warehouse_id}";
 
         const searchStatus = ref(undefined);
         const activeTabKey = ref("all");

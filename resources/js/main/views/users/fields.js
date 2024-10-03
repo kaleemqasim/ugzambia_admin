@@ -114,6 +114,12 @@ const fields = () => {
             key: "total",
             sorter:true
         },
+        {
+            title: t("Period"),
+            dataIndex: "period",
+            key: "period",
+            sorter:true
+        },
         // {
         //     title: t("user.email"),
         //     dataIndex: "email",
