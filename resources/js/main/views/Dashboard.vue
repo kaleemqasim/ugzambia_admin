@@ -6,7 +6,7 @@
     </AdminPageHeader>
 
     <div class="dashboard-page-content-container">
-        <UpdateAppAlert />
+        <!-- <UpdateAppAlert /> -->
 
         <a-row :gutter="[8, 8]" class="mt-30 mb-10">
             <a-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
