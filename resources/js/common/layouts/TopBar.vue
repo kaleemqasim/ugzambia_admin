@@ -6,6 +6,13 @@
                     <MenuOutlined class="trigger" @click="showHideMenu" />
                 </a-space>
             </a-col>
+
+            <a-col :span="4">
+                <a-space>
+                    <p>Zambia Union of Government and Allied Workers (UG)</p>
+                </a-space>
+            </a-col>
+
             <a-col :span="20">
                 <HeaderRightIcons>
                     <a-space>
