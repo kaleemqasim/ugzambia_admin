@@ -86,7 +86,6 @@ export default {
                     newVal.name == "verify.main"
                 )
             ) {
-                alert('asd')
                 router.push({
                     name: "admin.subscription.current_plan",
                 });
