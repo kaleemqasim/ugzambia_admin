@@ -824,15 +824,10 @@
                         v-bind:is="appModule + 'Menu'"
                         @menuSelected="menuSelected"
                     />
-                    <a-sub-menu key="hrm">
+                    <!-- <a-sub-menu key="hrm">
                         <template #title>
                             <TeamOutlined />
                             <span>{{ $t("menu.hrm") }}</span>
-                            <!-- <a-badge
-                                :count="$t('common.module')"
-                                size="small"
-                                :style="{ marginLeft: '5px' }"
-                            ></a-badge> -->
                         </template>
                         <a-menu-item
                             @click="
@@ -950,7 +945,7 @@
                         >
                             {{ $t("menu.hrm_settings") }}
                         </a-menu-item>
-                    </a-sub-menu>
+                    </a-sub-menu> -->
 
                     <a-menu-item
                         @click="
