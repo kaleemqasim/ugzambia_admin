@@ -31,24 +31,24 @@
                         "
                     >
                     <a-space>
-                        <a-button type="primary" @click="syncEmployees" :loading="isSyncing">
+                        <a-button v-if="employeesPage" type="primary" @click="syncEmployees" :loading="isSyncing">
                             <SyncOutlined v-if="!isSyncing" />    
                             Sync Employees
                             
                             <!-- {{ $t(`${langKey}.add`) }} -->
                         </a-button>
 
-                        <a-button type="primary" @click="updateEmployees" :loading="isUpdating">
+                        <a-button v-if="employeesPage" type="primary" @click="updateEmployees" :loading="isUpdating">
                             <SaveOutlined v-if="!isUpdating" />
                             Update Employees
                             <!-- {{ $t(`${langKey}.add`) }} -->
                         </a-button>
 
-                        <a-button type="primary">
+                        <a-button v-if="employeesPage" type="primary">
                             {{ totalMembers }} Members
                         </a-button>
 
-                        <a-button type="primary" @click="addItem">
+                        <a-button v-if="!emplyees" type="primary" @click="addItem">
                             <PlusOutlined />
                             
                         </a-button>
@@ -429,6 +429,7 @@ export default {
         const isSyncing = ref(false);
         const isUpdating = ref(false);
         const totalMembers = ref(0);
+        const employeesPage = ref(false);
 
         const {
             statusColors,
@@ -522,11 +523,19 @@ export default {
         };
 
         onMounted(() => {
+            let current_url = window.location.href
+            if(current_url.includes('admin/customers')) {
+                employeesPage.value = true;
+            } else {
+                employeesPage.value = false;
+            }
+
             setUrlData();
             crudVariables.table.filterableColumns = filterableColumns;
 
             setFormData();
             fetchTotalMembers();
+            
         });
 
         const fetchTotalMembers =  async() => {
@@ -662,7 +671,8 @@ export default {
             updateEmployees,
             isSyncing,
             isUpdating,
-            totalMembers
+            totalMembers,
+            employeesPage
         };
     },
 };
