@@ -2368,6 +2368,40 @@
                                                     </div>
                                                 </td>
                                             </tr>
+
+
+
+
+                                            <tr>
+                                                <td class="text-gray-800">
+                                                    {{ $t("Reports") }}
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex">
+                                                        <label
+                                                            class="form-check form-check-custom me-5 me-lg-20"
+                                                        >
+                                                            <a-checkbox
+                                                                :value="
+                                                                    permissions[
+                                                                        'suppliers_view'
+                                                                    ]
+                                                                "
+                                                            >
+                                                                {{
+                                                                    $t(
+                                                                        "common.view"
+                                                                    )
+                                                                }}
+                                                            </a-checkbox>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+
+
+
                                             <tr>
                                                 <td :colspan="3">&nbsp;</td>
                                             </tr>
