@@ -632,9 +632,8 @@ export default {
         });
 
         watch(route, (newRoute, oldRoute) => {
-            console.log('Route changed:', newRoute, oldRoute);
-
-            let current_url = newRoute
+            let current_url = newRoute.path
+            console.log({current_url})
             if(current_url.includes('admin/customers')) {
                 employeesPage.value = true;
             } else {
