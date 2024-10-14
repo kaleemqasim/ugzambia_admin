@@ -143,6 +143,7 @@ const common = () => {
     };
 
     const formatAmountCurrency = (amount) => {
+        // const newAmount = parseFloat(Math.abs(amount)).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         const newAmount = parseFloat(Math.abs(amount)).toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         if (appSetting.value.currency.position == "front") {

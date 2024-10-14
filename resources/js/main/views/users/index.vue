@@ -47,12 +47,12 @@
                         <a-button type="primary">
                             {{ totalMembers }} Members
                         </a-button>
-                        <!-- <ImportUsers
+                        <ImportUsers
                             :pageTitle="importPageTitle"
                             :sampleFileUrl="sampleFileUrl"
                             :importUrl="importUrl"
                             @onUploadSuccess="setUrlData"
-                        /> -->
+                        />
                     </a-space>
                     </template>
                     <a-button
