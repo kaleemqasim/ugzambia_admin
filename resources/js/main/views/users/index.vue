@@ -430,7 +430,7 @@ export default {
         const isUpdating = ref(false);
         const totalMembers = ref(0);
         const employeesPage = ref(false);
-
+        const curr_route = useRoute();
         const {
             statusColors,
             userStatus,
@@ -629,6 +629,17 @@ export default {
 
         watch(selectedWarehouse, (newVal, oldVal) => {
             setUrlData();
+        });
+
+        watch(route, (newRoute, oldRoute) => {
+            console.log('Route changed:', newRoute, oldRoute);
+
+            let current_url = newRoute
+            if(current_url.includes('admin/customers')) {
+                employeesPage.value = true;
+            } else {
+                employeesPage.value = false;
+            }
         });
 
         const totals = computed(() => {
