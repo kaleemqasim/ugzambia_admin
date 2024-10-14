@@ -524,6 +524,7 @@ export default {
 
         onMounted(() => {
             let current_url = window.location.href
+            console.log(current_url)
             if(current_url.includes('admin/customers')) {
                 employeesPage.value = true;
             } else {
