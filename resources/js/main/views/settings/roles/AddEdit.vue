@@ -2384,7 +2384,7 @@
                                                             <a-checkbox
                                                                 :value="
                                                                     permissions[
-                                                                        'suppliers_view'
+                                                                        'reports_view'
                                                                     ]
                                                                 "
                                                             >

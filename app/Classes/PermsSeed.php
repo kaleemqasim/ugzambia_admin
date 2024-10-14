@@ -760,6 +760,12 @@ class PermsSeed
             'display_name' => 'Customer Delete'
         ],
 
+        // Reports
+        'reports_view' => [
+            'name' => 'reports_view',
+            'display_name' => 'Reports View'
+        ],
+
         // Supplier
         'suppliers_view' => [
             'name' => 'suppliers_view',
