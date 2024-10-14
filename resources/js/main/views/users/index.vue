@@ -48,7 +48,7 @@
                             {{ totalMembers }} Members
                         </a-button>
 
-                        <a-button v-if="!emplyees" type="primary" @click="addItem">
+                        <a-button v-if="!employeesPage" type="primary" @click="addItem">
                             <PlusOutlined />
                             
                         </a-button>
