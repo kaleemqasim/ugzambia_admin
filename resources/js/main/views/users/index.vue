@@ -47,12 +47,17 @@
                         <a-button type="primary">
                             {{ totalMembers }} Members
                         </a-button>
-                        <ImportUsers
+
+                        <a-button type="primary" @click="addItem">
+                            <PlusOutlined />
+                            
+                        </a-button>
+                        <!-- <ImportUsers
                             :pageTitle="importPageTitle"
                             :sampleFileUrl="sampleFileUrl"
                             :importUrl="importUrl"
                             @onUploadSuccess="setUrlData"
-                        />
+                        /> -->
                     </a-space>
                     </template>
                     <a-button
