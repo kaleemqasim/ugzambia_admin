@@ -557,9 +557,11 @@
                         <span>{{ $t("menu.staff_members") }}</span>
                     </a-menu-item>
 
-                    <a-sub-menu
-                        v-if="
-                            (((permsArray.includes('purchases_view') ||
+
+
+
+                    
+                            <!-- (((permsArray.includes('purchases_view') ||
                                 permsArray.includes('sales_view') ||
                                 permsArray.includes('purchase_returns_view') ||
                                 permsArray.includes('sales_returns_view')) &&
@@ -569,7 +571,15 @@
                                 permsArray.includes('suppliers_view') ||
                                 permsArray.includes('expenses_view') ||
                                 permsArray.includes('admin')) &&
-                            willSubscriptionModuleVisible('reports')
+                            willSubscriptionModuleVisible('reports') -->
+                        
+
+                    <a-sub-menu
+                        v-if="
+                            (
+                                permsArray.includes('reports_view') ||
+                                permsArray.includes('admin')
+                            )
                         "
                         key="reports"
                     >

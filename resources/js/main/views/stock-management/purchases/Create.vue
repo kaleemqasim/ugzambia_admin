@@ -471,7 +471,7 @@
                             </a-col>
                         </a-row>
 
-                        <a-row :gutter="16">
+                        <!-- <a-row :gutter="16">
                             <a-col :xs="24" :sm="24" :md="24" :lg="24">
                                 <a-form-item
                                     :label="$t('stock.order_tax')"
@@ -581,7 +581,7 @@
                                     </a-input-number>
                                 </a-form-item>
                             </a-col>
-                        </a-row>
+                        </a-row> -->
                         <!-- <div
                             v-if="
                                 $t(`${orderPageObject.langKey}`) ==
