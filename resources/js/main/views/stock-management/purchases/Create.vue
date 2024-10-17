@@ -137,7 +137,7 @@
                         >
                             <a-textarea
                                 v-model:value="formData.notes"
-                                :placeholder="$t('stock.notes')"
+                                :placeholder="$t('Mobile Phone No')"
                                 :auto-size="{ minRows: 1, maxRows: 1 }"
                             />
                         </a-form-item>
