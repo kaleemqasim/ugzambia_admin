@@ -126,7 +126,7 @@
                         
 
                         <a-form-item
-                            :label="$t('stock.notes')"
+                            :label="$t('Mobile Phone No')"
                             name="notes"
                             :help="
                                 rules.notes ? rules.notes.message : null
