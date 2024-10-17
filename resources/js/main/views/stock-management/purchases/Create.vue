@@ -56,30 +56,22 @@
             <a-form layout="vertical">
                 <a-row :gutter="16">
                     <a-col :xs="24" :sm="24" :md="8" :lg="8">
-                        <a-form-item
-                            :label="$t(`stock.invoice_number`)"
-                            name="invoice_number"
-                            :help="
-                                rules.invoice_number
-                                    ? rules.invoice_number.message
-                                    : null
+                       
+
+
+
+                        <UserSearch
+                            :orderPageObject="orderPageObject"
+                            :rules="rules"
+                            :usersList="[]"
+                            :editOrderDisable="false"
+                            @onSuccess="
+                                (outputUser) => (formData.user_id = outputUser)
                             "
-                            :validateStatus="
-                                rules.invoice_number ? 'error' : null
-                            "
-                        >
-                            <a-input
-                                v-model:value="formData.invoice_number"
-                                :placeholder="
-                                    $t('common.placeholder_default_text', [
-                                        $t('stock.invoice_number'),
-                                    ])
-                                "
-                            />
-                            <small class="small-text-message">
-                                {{ $t("stock.invoie_number_blank") }}
-                            </small>
-                        </a-form-item>
+                        />
+
+
+
                     </a-col>
                     <a-col
                         v-if="orderPageObject.type == 'stock-transfers'"
@@ -131,15 +123,29 @@
                         </a-form-item>
                     </a-col>
                     <a-col v-else :xs="24" :sm="24" :md="8" :lg="8">
-                        <UserSearch
-                            :orderPageObject="orderPageObject"
-                            :rules="rules"
-                            :usersList="[]"
-                            :editOrderDisable="false"
-                            @onSuccess="
-                                (outputUser) => (formData.user_id = outputUser)
+                        
+
+                        <a-form-item
+                            :label="$t('stock.notes')"
+                            name="notes"
+                            :help="
+                                rules.notes ? rules.notes.message : null
                             "
-                        />
+                            :validateStatus="
+                                rules.notes ? 'error' : null
+                            "
+                        >
+                            <a-textarea
+                                v-model:value="formData.notes"
+                                :placeholder="$t('stock.notes')"
+                                :auto-size="{ minRows: 2, maxRows: 3 }"
+                            />
+                        </a-form-item>
+                        
+
+
+
+
                         <!-- <a-form-item
                         :label="$t(`${orderPageObject.langKey}.user`)"
                         name="user_id"
@@ -410,23 +416,32 @@
                                 </a-form-item>
                             </a-col>
                         </a-row>
+                        
                         <a-row :gutter="16">
                             <a-col :xs="24" :sm="24" :md="24" :lg="24">
                                 <a-form-item
-                                    :label="$t('stock.notes')"
-                                    name="notes"
+                                    :label="$t(`stock.invoice_number`)"
+                                    name="invoice_number"
                                     :help="
-                                        rules.notes ? rules.notes.message : null
+                                        rules.invoice_number
+                                            ? rules.invoice_number.message
+                                            : null
                                     "
                                     :validateStatus="
-                                        rules.notes ? 'error' : null
+                                        rules.invoice_number ? 'error' : null
                                     "
                                 >
-                                    <a-textarea
-                                        v-model:value="formData.notes"
-                                        :placeholder="$t('stock.notes')"
-                                        :auto-size="{ minRows: 2, maxRows: 3 }"
+                                    <a-input
+                                        v-model:value="formData.invoice_number"
+                                        :placeholder="
+                                            $t('common.placeholder_default_text', [
+                                                $t('stock.invoice_number'),
+                                            ])
+                                        "
                                     />
+                                    <small class="small-text-message">
+                                        {{ $t("stock.invoie_number_blank") }}
+                                    </small>
                                 </a-form-item>
                             </a-col>
                         </a-row>
@@ -471,6 +486,7 @@
                             </a-col>
                         </a-row>
 
+                        <!-- commenting taxes start -->
                         <!-- <a-row :gutter="16">
                             <a-col :xs="24" :sm="24" :md="24" :lg="24">
                                 <a-form-item
@@ -582,6 +598,11 @@
                                 </a-form-item>
                             </a-col>
                         </a-row> -->
+
+
+                        <!-- commenting taxes end  -->
+
+
                         <!-- <div
                             v-if="
                                 $t(`${orderPageObject.langKey}`) ==
