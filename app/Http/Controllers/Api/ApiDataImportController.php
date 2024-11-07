@@ -56,6 +56,8 @@ class ApiDataImportController extends Controller
                 info('current month');
                 $request->session()->forget('importData');
                 $request->session()->put('importData', $importData);
+                $request->session()->forget('periodId');
+                $request->session()->put('periodId', $period_id);
                 
                 return response()->json([
                     'data' => $period_id,
@@ -77,7 +79,8 @@ class ApiDataImportController extends Controller
                         $importData = $response->json();
                         $request->session()->forget('importData');
                         $request->session()->put('importData', $importData);
-                        
+                        $request->session()->forget('periodId');
+                        $request->session()->put('periodId', $prevPeriodDate);
                         return response()->json([
                             'data' => $period_id,
                             'status' => 200,
@@ -94,11 +97,6 @@ class ApiDataImportController extends Controller
             'message' => 'Failed to fetch data from the API.'
         ], $response->status());
     }
-
-    public function fetchEmployeesData() {
-
-    }
-
 
     public function processImportedData(Request $request)
     {
@@ -246,6 +244,11 @@ class ApiDataImportController extends Controller
                 $this->insertUsersAndDetails($usersData, $userDetailsData);
             }
 
+            $period_id = $request->session()->get('periodId', null);
+
+            if($period_id) {
+                Translation::where('key', 'last_employee_synced')->update(['value' => $period_id]);
+            }
 
             return response()->json([
                 'data' => [],
