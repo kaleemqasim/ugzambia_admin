@@ -483,7 +483,7 @@ export default {
         const syncEmployees = async () => {
             isSyncing.value = true;
             let formattedDate = selectedMonth.value;
-            if(!selectedMonth || selectedMonth == "") {
+            if(!formattedDate || formattedDate == "") {
                 const now = new Date();
                 const year = now.getFullYear();
                 const month = now.getMonth() + 1;

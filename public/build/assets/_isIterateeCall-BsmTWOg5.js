@@ -1,0 +1,1 @@
+import{bD as i,b9 as t,bE as f,bF as n}from"./app-Da3MRomk.js";function u(e,s,r){if(!i(r))return!1;var a=typeof s;return(a=="number"?t(r)&&f(s,r.length):a=="string"&&s in r)?n(r[s],e):!1}export{u as i};
