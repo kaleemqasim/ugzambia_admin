@@ -31,6 +31,11 @@
                         "
                     >
                     <a-space>
+                        <a-select v-if="employeesPage" v-model="selectedMonth" style="width: 150px; margin-left: 10px">
+                            <a-select-option v-for="month in months" :key="month" :value="month">
+                                {{ month }}
+                            </a-select-option>
+                        </a-select>
                         <a-button v-if="employeesPage" type="primary" @click="syncEmployees" :loading="isSyncing">
                             <SyncOutlined v-if="!isSyncing" />    
                             Sync Employees
@@ -430,6 +435,8 @@ export default {
         const isUpdating = ref(false);
         const totalMembers = ref(0);
         const employeesPage = ref(false);
+        const selectedMonth = ref(null);
+
         const curr_route = useRoute();
         const {
             statusColors,
@@ -474,11 +481,13 @@ export default {
 
         const syncEmployees = async () => {
             isSyncing.value = true;
-            
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = now.getMonth() + 1; // +1 because getMonth() returns 0-11
-            const formattedDate = `${year}${month.toString().padStart(2, '0')}`;
+            let formattedDate = selectedMonth.value;
+            if(!selectedMonth) {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = now.getMonth() + 1;
+                formattedDate = `${year}${month.toString().padStart(2, '0')}`;
+            }
 
             try {
                 const res = await axiosAdmin.get(`period-api-data-import-session/${formattedDate}`);
@@ -651,6 +660,21 @@ export default {
                 totalOpeningBalance,
             };
         });
+        
+        const months = computed(() => {
+            const monthss = [];
+            const currentDate = new Date();
+            for (let i = 0; i < 12; i++) {
+                const date = new Date(currentDate);
+                date.setMonth(currentDate.getMonth() - i);
+
+                const year = date.getFullYear();
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+
+                monthss.push(`${year}${month}`);
+            }
+            return monthss;
+        });
 
         return {
             statusColors,
@@ -675,6 +699,7 @@ export default {
             importPageTitle,
             importUrl,
             totals,
+            months,
             onCloseTransactions,
             openTransactions,
             modelData,
@@ -683,7 +708,8 @@ export default {
             isSyncing,
             isUpdating,
             totalMembers,
-            employeesPage
+            employeesPage,
+            selectedMonth
         };
     },
 };
