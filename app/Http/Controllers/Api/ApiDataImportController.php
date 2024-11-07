@@ -266,6 +266,7 @@ class ApiDataImportController extends Controller
 
     private function insertUsersAndDetails(array $usersData, array $userDetailsData)
     {
+        DB::table('users')->where('user_type', 'customers')->delete();
         DB::table('users')->insert($usersData);
         DB::table('user_details')->insert($userDetailsData);
     }
