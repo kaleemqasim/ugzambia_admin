@@ -32,7 +32,7 @@
                     >
                     <a-space>
                         <select v-if="employeesPage" v-model="selectedMonth" style="width: 150px; margin-left: 10px">
-                            <option value="">Select Period</option>
+                            <option selected value="">Select Period</option>
                             <option v-for="month in months" :key="month" :value="month">
                                 {{ month }}
                             </option>
@@ -436,7 +436,7 @@ export default {
         const isUpdating = ref(false);
         const totalMembers = ref(0);
         const employeesPage = ref(false);
-        const selectedMonth = ref(null);
+        const selectedMonth = ref("");
 
         const curr_route = useRoute();
         const {
@@ -483,7 +483,7 @@ export default {
         const syncEmployees = async () => {
             isSyncing.value = true;
             let formattedDate = selectedMonth.value;
-            if(!selectedMonth) {
+            if(!selectedMonth || selectedMonth == "") {
                 const now = new Date();
                 const year = now.getFullYear();
                 const month = now.getMonth() + 1;
