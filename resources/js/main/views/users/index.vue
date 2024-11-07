@@ -31,11 +31,11 @@
                         "
                     >
                     <a-space>
-                        <a-select v-if="employeesPage" v-model="selectedMonth" style="width: 150px; margin-left: 10px">
-                            <a-select-option v-for="month in months" :key="month" :value="month">
+                        <select v-if="employeesPage" v-model="selectedMonth" style="width: 150px; margin-left: 10px">
+                            <option v-for="month in months" :key="month" :value="month">
                                 {{ month }}
-                            </a-select-option>
-                        </a-select>
+                            </option>
+                        </select>
                         <a-button v-if="employeesPage" type="primary" @click="syncEmployees" :loading="isSyncing">
                             <SyncOutlined v-if="!isSyncing" />    
                             Sync Employees
