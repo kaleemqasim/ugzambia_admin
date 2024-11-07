@@ -65,7 +65,7 @@ class ApiDataImportController extends Controller
                 ]);
             } else {
                 info('previous month');
-                $periodDate = DateTime::createFromFormat('Ym', $period_id);
+                $periodDate = \DateTime::createFromFormat('Ym', $period_id);
                 $periodDate->modify('-1 month');
                 $prevPeriodDate = $periodDate->format('Ym');
                 if($last_synced && $prevPeriodDate != $last_synced->value) {
