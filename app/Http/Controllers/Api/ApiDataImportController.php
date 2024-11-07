@@ -52,8 +52,8 @@ class ApiDataImportController extends Controller
         if ($response->successful()) {
             $importData = $response->json();
 
-            if(count($importData)) {
-                info('current month');
+            // if(count($importData)) {
+                // info('current month');
                 $request->session()->forget('importData');
                 $request->session()->put('importData', $importData);
                 $request->session()->forget('periodId');
@@ -65,31 +65,31 @@ class ApiDataImportController extends Controller
                     'count' => count($importData),
                     'message' => 'Data stored in session successfully.'
                 ]);
-            } else {
-                info('previous month');
-                $periodDate = \DateTime::createFromFormat('Ym', $period_id);
-                $periodDate->modify('-1 month');
-                $prevPeriodDate = $periodDate->format('Ym');
-                if($last_synced && $prevPeriodDate != $last_synced->value) {
-                    $apiUrl = 'https://ugzambia.net/server/index.php/Sys/current/' . $prevPeriodDate;
-                    $response = Http::withHeaders([
-                        'Key' => 'ugas-system-mmarifat-112233'
-                    ])->patch($apiUrl);
-                    if ($response->successful()) {
-                        $importData = $response->json();
-                        $request->session()->forget('importData');
-                        $request->session()->put('importData', $importData);
-                        $request->session()->forget('periodId');
-                        $request->session()->put('periodId', $prevPeriodDate);
-                        return response()->json([
-                            'data' => $period_id,
-                            'status' => 200,
-                            'count' => count($importData),
-                            'message' => 'Data stored in session successfully.'
-                        ]);
-                    }
-                }
-            }
+            // } else {
+                // info('previous month');
+                // $periodDate = \DateTime::createFromFormat('Ym', $period_id);
+                // $periodDate->modify('-1 month');
+                // $prevPeriodDate = $periodDate->format('Ym');
+                // if($last_synced && $prevPeriodDate != $last_synced->value) {
+                //     $apiUrl = 'https://ugzambia.net/server/index.php/Sys/current/' . $prevPeriodDate;
+                //     $response = Http::withHeaders([
+                //         'Key' => 'ugas-system-mmarifat-112233'
+                //     ])->patch($apiUrl);
+                //     if ($response->successful()) {
+                //         $importData = $response->json();
+                //         $request->session()->forget('importData');
+                //         $request->session()->put('importData', $importData);
+                //         $request->session()->forget('periodId');
+                //         $request->session()->put('periodId', $prevPeriodDate);
+                //         return response()->json([
+                //             'data' => $period_id,
+                //             'status' => 200,
+                //             'count' => count($importData),
+                //             'message' => 'Data stored in session successfully.'
+                //         ]);
+                //     }
+                // }
+            // }
         }
     
         return response()->json([
