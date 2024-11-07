@@ -640,6 +640,11 @@ export default {
             setUrlData();
         });
 
+        watch(selectedMonth, (newValue) => {
+            selectedMonth.value = newValue;
+            console.log('Selected Month changed to:', newValue);
+        });
+
         watch(route, (newRoute, oldRoute) => {
             let current_url = newRoute.path
             console.log({current_url})
