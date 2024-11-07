@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Http;
 use Exception;
 use Illuminate\Support\Facades\Artisan;
 use App\Models\Role;
+use App\Models\Translation;
 
 class ApiDataImportController extends Controller
 {
@@ -39,32 +40,64 @@ class ApiDataImportController extends Controller
 
 
         
-        public function index(Request $request, $period_id)
-        {
-            // $period_id = '202409';
-            $apiUrl = 'https://ugzambia.net/server/index.php/Sys/current/' . $period_id;
-            $response = Http::withHeaders([
-                'Key' => 'ugas-system-mmarifat-112233'
-            ])->patch($apiUrl);
-        
-            if ($response->successful()) {
-                $importData = $response->json();
+    public function index(Request $request, $period_id)
+    {
+        // $period_id = '202409';
+        $last_synced = Translation::where('key', 'last_employee_synced')->first();
+        $apiUrl = 'https://ugzambia.net/server/index.php/Sys/current/' . $period_id;
+        $response = Http::withHeaders([
+            'Key' => 'ugas-system-mmarifat-112233'
+        ])->patch($apiUrl);
+    
+        if ($response->successful()) {
+            $importData = $response->json();
+
+            if(count($importData)) {
+                info('current month');
                 $request->session()->forget('importData');
                 $request->session()->put('importData', $importData);
-        
+                
                 return response()->json([
                     'data' => $period_id,
                     'status' => 200,
                     'count' => count($importData),
                     'message' => 'Data stored in session successfully.'
                 ]);
+            } else {
+                info('previous month');
+                $periodDate = DateTime::createFromFormat('Ym', $period_id);
+                $periodDate->modify('-1 month');
+                $prevPeriodDate = $periodDate->format('Ym');
+                if($last_synced && $prevPeriodDate != $last_synced->value) {
+                    $apiUrl = 'https://ugzambia.net/server/index.php/Sys/current/' . $prevPeriodDate;
+                    $response = Http::withHeaders([
+                        'Key' => 'ugas-system-mmarifat-112233'
+                    ])->patch($apiUrl);
+                    if ($response->successful()) {
+                        $importData = $response->json();
+                        $request->session()->forget('importData');
+                        $request->session()->put('importData', $importData);
+                        
+                        return response()->json([
+                            'data' => $period_id,
+                            'status' => 200,
+                            'count' => count($importData),
+                            'message' => 'Data stored in session successfully.'
+                        ]);
+                    }
+                }
             }
-        
-            return response()->json([
-                'status' => $response->status(),
-                'message' => 'Failed to fetch data from the API.'
-            ], $response->status());
         }
+    
+        return response()->json([
+            'status' => $response->status(),
+            'message' => 'Failed to fetch data from the API.'
+        ], $response->status());
+    }
+
+    public function fetchEmployeesData() {
+
+    }
 
 
     public function processImportedData(Request $request)
@@ -230,10 +263,7 @@ class ApiDataImportController extends Controller
 
     private function insertUsersAndDetails(array $usersData, array $userDetailsData)
     {
-        // Bulk insert users
         DB::table('users')->insert($usersData);
-    
-        // Bulk insert user details
         DB::table('user_details')->insert($userDetailsData);
     }
 
