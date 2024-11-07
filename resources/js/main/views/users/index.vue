@@ -32,6 +32,7 @@
                     >
                     <a-space>
                         <select v-if="employeesPage" v-model="selectedMonth" style="width: 150px; margin-left: 10px">
+                            <option value="">Select Period</option>
                             <option v-for="month in months" :key="month" :value="month">
                                 {{ month }}
                             </option>
