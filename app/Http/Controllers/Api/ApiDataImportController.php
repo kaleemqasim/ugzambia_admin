@@ -197,7 +197,7 @@ class ApiDataImportController extends Controller
                 // Prepare user data for bulk insert
                 $usersData[] = [
                     'id' => $lastId,
-                    'period_id' => $data['periodName'],
+                    'period' => $data['periodName'],
                     'name' => $data['names'],
                     'phone' => $data['nrcNo'],
                     'address' => $data['district'] . ',' . $data['province'],
